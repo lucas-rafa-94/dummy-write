@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dummy-write
+  labels:
+    app: dummywrite
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dummywrite
+  template:
+    metadata:
+      labels:
+        app: dummywrite
+    spec:
+      volumes:
+      - name: dummy-pv-storage
+        persistentVolumeClaim:
+          claimName: dummy-pv-claim
+      containers:
+      - name: dummywrite
+        image: lucassantoss/dummywrite:v1
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - mountPath: "/app/data"
+          name: dummy-pv-storage
